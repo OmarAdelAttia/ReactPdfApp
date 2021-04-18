@@ -1,0 +1,147 @@
+installing the bootstrap in (public >> index.html) from bootstrap [line 14]
+
+create folder in (src >> components)
+
+create 2 js files in (src >> components >> Post.js , src >> components >> PDF.js)
+
+write this code in Post.js >>
+                                import React, { Component } from 'react';
+                                class Post extends Compoment {
+                                    state = {
+                                        title: '',
+                                        content: '',
+                                        image: '',
+                                        postSubmitted: false
+                                    }
+                                    render() {
+                                        return (
+                                            <>Hi</>
+                                        )
+                                    }
+                                }
+                                export default Post;
+
+in App.js (clean the code & write this one >> )
+                                                import React from 'react';
+                                                import './App.css';
+                                                import Post from './components/Post'
+                                                function App() {
+                                                return (
+                                                    <div className="App">
+                                                    <Post />
+                                                    </div>
+                                                );
+                                                }
+                                                export default App;
+
+clean App.css just leave .App & add >>
+                                        .Post {
+                                        max-width: 800px;
+                                        width: 100%;
+                                        display: table;
+                                        margin: 0 auto;
+                                        padding: 20px 50px;
+                                        }
+
+go to Post.js and write this code starting with the render then the functions up it >> 
+                                                                                        import React, { Component } from 'react';
+                                                                                        class Post extends Component {
+                                                                                            state = {
+                                                                                                title: '',
+                                                                                                content: '',
+                                                                                                image: '',
+                                                                                                postSubmitted: false
+                                                                                            }
+                                                                                            onChange = input => e => {
+                                                                                                this.setState({
+                                                                                                    [input]: e.target.value
+                                                                                                })
+                                                                                            }
+                                                                                            submitPost = (e) => {
+                                                                                                if (!this.state.title || !this.state.content) {
+                                                                                                    alert('All fields are required!');
+                                                                                                    e.preventDefault();
+                                                                                                }
+                                                                                                else {
+                                                                                                    this.setState({
+                                                                                                        postSubmitted: true
+                                                                                                    })
+                                                                                                }
+                                                                                            }
+                                                                                            render() {
+                                                                                                return (
+                                                                                                    <>
+                                                                                                        {!this.state.postSubmitted ?
+                                                                                                            (
+                                                                                                                < div className="container mt-5">
+                                                                                                                    <div className="bg-light mt-3">
+                                                                                                                        <div className="container px-5">
+                                                                                                                            <div className="row">
+                                                                                                                                <div className="col-md-12">
+                                                                                                                                    <div className="well well-sm">
+                                                                                                                                        <form className="from-horizontal" method="post">
+                                                                                                                                            <fieldset>
+                                                                                                                                                <legend className="text-center header my-5">Add new Post</legend>
+                                                                                                                                                <div className="form-group mb-5">
+                                                                                                                                                    <span className="col-md-1 col-md-offset-2 text-center"><i className="fa fa-user bigicon"></i></span>
+                                                                                                                                                    <input onChange={this.onChange('title')} name="title" type="text" placeholder="Post Title" className="form-control" />
+                                                                                                                                                </div>
+                                                                                                                                                <div className="form-group mb-5">
+                                                                                                                                                    <span className="col-md-1 col-md-offset-2 text-center"><i className="fa fa-user bigicon"></i></span>
+                                                                                                                                                    <input onChange={this.onChange('image')} name="image" type="text" placeholder="http://" className="form-control" />
+                                                                                                                                                </div>
+                                                                                                                                                <div className="form-group mb-5">
+                                                                                                                                                    <span className="col-md-1 col-md-offset-2 text-center"><i className="fa fa-pincel-square-o bigicon"></i></span>
+                                                                                                                                                    <textarea onChange={this.onChange('content')} name="content" type="text" placeholder="Enter your text here" className="form-control" rows="7"></textarea>
+                                                                                                                                                </div>
+                                                                                                                                                <div className="form-group mb-5">
+                                                                                                                                                    <button onClick={this.submitPost} type="button" className="btn btn-primary btn-lg">Submit</button>
+                                                                                                                                                </div>
+                                                                                                                                            </fieldset>
+                                                                                                                                        </form>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                </div>) : (
+                                                                                                                <PDF />
+                                                                                                            )
+                                                                                                        }
+                                                                                                    </>
+                                                                                                )
+                                                                                            }
+                                                                                        }
+                                                                                        export default Post;
+
+OR you can copy a form from the bootstrap and write the functions
+
+write this comand in the terminal to install react-PDF >>
+                                                            npm install react-to-pdf
+
+go to PDF.js file & write this code >>
+                                        import React from 'react';
+                                        import Pdf from "react-to-pdf";
+                                        const ref = React.createRef();
+                                        const PDF = (props) => {
+                                            return (
+                                                <>
+                                                    <div className="Post" ref={ref}>
+                                                        Hello
+                                                    </div>
+                                                    <Pdf targetRef={ref} filename="post.pdf">
+                                                        {({ toPdf }) => <button onClick={toPdf}>Capture as PDF</button>}
+                                                    </Pdf>
+                                                </>
+                                            )
+                                        }
+                                        export default PDF;
+
+return to Post.js file & add this line in <PDF/> tag >> 
+                                                        title={this.state.title} content={this.state.content} image={this.state.image}
+
+
+return to PDF.js file & add this code instead of Hello to send the data from Post.js to PDF.js >>
+                                                                                                    <h1>{props.title}</h1>
+                                                                                                    <img src={props.image} alt={props.title} />
+                                                                                                    <p>{props.content}</p>
